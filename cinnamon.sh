@@ -24,6 +24,13 @@ gsettings set org.cinnamon.desktop.keybindings custom-list "['custom0', 'custom1
 # Super+W used to be "workspace up" too
 gsettings set org.cinnamon.desktop.keybindings.wm switch-to-workspace-up "['<Control><Alt>Up', '<Alt>F1']"
 
+# keyboard: only US international (IBus used to add plain US on Super+Space)
+gsettings set org.cinnamon.desktop.input-sources sources "[('xkb', 'us+intl')]"
+gsettings set org.freedesktop.ibus.general preload-engines "['xkb:us:intl:eng']"
+gsettings set org.freedesktop.ibus.general use-system-keyboard-layout true
+# sticky keys made a lone Super press latch, turning typed letters into shortcuts
+gsettings set org.cinnamon.desktop.a11y.keyboard stickykeys-enable false
+
 # same 16px size for every tray icon
 gsettings set org.cinnamon panel-zone-icon-sizes '[{"panelId":1,"left":0,"center":0,"right":16},{"panelId":2,"left":0,"center":0,"right":16}]'
 gsettings set org.cinnamon panel-zone-symbolic-icon-sizes '[{"panelId":1,"left":15,"center":15,"right":16},{"panelId":2,"left":30,"center":17,"right":16}]'

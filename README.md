@@ -82,4 +82,5 @@ Ficam fora do script porque mexem no sistema ou dependem do hardware:
 - **Nome da GPU:** `sudo update-pciids`. Mesmo assim, o fastfetch mostra o nome fixo "AMD Radeon RX 9060 XT" pelo modelo.
 - **Rótulos dos discos:** `sudo e2label /dev/sda1 Dados` e `sudo e2label /dev/nvme0n1p2 Sistema`
 - **Heroic (Flatpak) enxergar o `/dados`:** `flatpak override --user --filesystem=/dados com.heroicgameslauncher.hgl`
+- **Teclado US Internacional também no login:** `sudo sed -i 's/^XKBVARIANT=""/XKBVARIANT="intl"/' /etc/default/keyboard`
 - **Atualização automática do APT:** Update Manager → Preferências → Automação
