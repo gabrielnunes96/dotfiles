@@ -1,0 +1,111 @@
+#!/usr/bin/env bash
+# Quick DNS switcher for the active NetworkManager connection, nvm-style.
+#   dns              show the current DNS
+#   dns ls           list providers
+#   dns use <name>   switch (default = the router/ISP DNS from DHCP)
+#   dns bench        query latency of every provider
+set -euo pipefail
+
+declare -A V4=(
+    [google]="8.8.8.8 8.8.4.4"
+    [cloudflare]="1.1.1.1 1.0.0.1"
+    [quad9]="9.9.9.9 149.112.112.112"
+    [adguard]="94.140.14.14 94.140.15.15"
+    [opendns]="208.67.222.222 208.67.220.220"
+)
+declare -A V6=(
+    [google]="2001:4860:4860::8888 2001:4860:4860::8844"
+    [cloudflare]="2606:4700:4700::1111 2606:4700:4700::1001"
+    [quad9]="2620:fe::fe 2620:fe::9"
+    [adguard]="2a10:50c0::ad1:ff 2a10:50c0::ad2:ff"
+    [opendns]="2620:119:35::35 2620:119:53::53"
+)
+declare -A INFO=(
+    [default]="DNS do roteador/operadora (DHCP)"
+    [google]="rápido e estável"
+    [cloudflare]="geralmente o mais rápido, foco em privacidade"
+    [quad9]="bloqueia domínios maliciosos"
+    [adguard]="bloqueia anúncios e rastreadores"
+    [opendns]="Cisco, filtros opcionais"
+)
+ORDER=(default google cloudflare quad9 adguard opendns)
+
+bold=$'\e[1m' dim=$'\e[2m' green=$'\e[32m' reset=$'\e[0m'
+
+connection() {
+    nmcli -t -f NAME,TYPE con show --active | awk -F: '$2 ~ /ethernet|wireless/ {print $1; exit}'
+}
+device() {
+    nmcli -g GENERAL.DEVICES con show "$1"
+}
+
+current() {
+    local con=$1 dns ignore
+    dns=$(nmcli -g ipv4.dns con show "$con" | tr ',' ' ')
+    ignore=$(nmcli -g ipv4.ignore-auto-dns con show "$con")
+    if [ "$ignore" = no ] && [ -z "$dns" ]; then
+        echo default; return
+    fi
+    for name in "${!V4[@]}"; do
+        [ "$dns" = "${V4[$name]}" ] && [ "$ignore" = yes ] && { echo "$name"; return; }
+    done
+    echo custom
+}
+
+cmd_show() {
+    local con dev name
+    con=$(connection); dev=$(device "$con")
+    name=$(current "$con")
+    echo "${bold}${name}${reset}  ${dim}(${con})${reset}"
+    resolvectl dns "$dev" | sed 's/^[^:]*: */  /'
+}
+
+cmd_ls() {
+    local cur name mark
+    cur=$(current "$(connection)")
+    for name in "${ORDER[@]}"; do
+        mark="  "; [ "$name" = "$cur" ] && mark="${green}->${reset}"
+        printf "%s %-11s %-34s %s\n" "$mark" "$name" "${V4[$name]:-automático}" "${dim}${INFO[$name]}${reset}"
+    done
+}
+
+cmd_use() {
+    local name=${1:-} con dev
+    if [ -z "$name" ] || { [ "$name" != default ] && [ -z "${V4[$name]:-}" ]; }; then
+        echo "uso: dns use <$(IFS='|'; echo "${ORDER[*]}")>" >&2; exit 1
+    fi
+    con=$(connection); dev=$(device "$con")
+    if [ "$name" = default ]; then
+        nmcli con mod "$con" ipv4.dns "" ipv4.ignore-auto-dns no ipv6.dns "" ipv6.ignore-auto-dns no
+    else
+        nmcli con mod "$con" ipv4.dns "${V4[$name]}" ipv4.ignore-auto-dns yes \
+                             ipv6.dns "${V6[$name]}" ipv6.ignore-auto-dns yes
+    fi
+    # applies to the running connection without dropping it
+    nmcli device reapply "$dev" >/dev/null
+    resolvectl flush-caches 2>/dev/null || true
+    cmd_show
+}
+
+cmd_bench() {
+    local name server ms
+    command -v dig >/dev/null || { echo "precisa do dig: sudo apt install dnsutils" >&2; exit 1; }
+    for name in "${ORDER[@]}"; do
+        [ "$name" = default ] && continue
+        server=${V4[$name]%% *}
+        # best of 3, on a domain unlikely to be in the provider's cache only by chance
+        ms=$(for _ in 1 2 3; do
+                 dig +tries=1 +time=2 @"$server" "bench-$RANDOM.example.com" 2>/dev/null \
+                     | awk '/Query time/ {print $4}'
+             done | sort -n | head -1)
+        printf "%-11s %s\n" "$name" "${ms:-timeout} ${ms:+ms}"
+    done | sort -k2 -n
+}
+
+case ${1:-} in
+    ""|current) cmd_show ;;
+    ls|list) cmd_ls ;;
+    use) cmd_use "${2:-}" ;;
+    bench) cmd_bench ;;
+    *) sed -n '2,7p' "$0" | sed 's/^# \{0,1\}//'; exit 1 ;;
+esac
