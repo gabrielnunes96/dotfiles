@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Conky widgets
+Exec=sh -c "$HOME/.config/conky/start.sh"
+X-GNOME-Autostart-enabled=true
+X-GNOME-Autostart-Delay=5

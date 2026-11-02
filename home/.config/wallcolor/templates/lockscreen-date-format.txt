@@ -1,0 +1,2 @@
+<span letter_spacing="6000" text_transform="uppercase">%B %d, %Y</span>
+<span font_desc="JetBrainsMono NF Bold 28" foreground="#{{accent}}">- %H:%M -</span>

@@ -1,0 +1,36 @@
+add_newline = true
+format = "$directory$git_branch$git_status$dotnet$nodejs$python$cmd_duration$character"
+
+[character]
+success_symbol = "[gab ❯](bold #{{accent}})"
+error_symbol   = "[gab ✗](bold #ff5555)"
+
+[directory]
+style = "bold #c9c9c9"
+truncation_length = 3
+truncate_to_repo = true
+
+[git_branch]
+symbol = " "
+style = "#{{accent_dark}}"
+format = "[$symbol$branch]($style) "
+
+[git_status]
+style = "#e0c060"
+
+[cmd_duration]
+min_time = 2000
+style = "#6a6a70"
+format = "[$duration]($style) "
+
+[dotnet]
+format = "[ $version]($style) "
+style = "#8e4a6a"
+
+[nodejs]
+format = "[ $version]($style) "
+style = "#7a9a6a"
+
+[python]
+format = "[ $version]($style) "
+style = "#c9a227"
