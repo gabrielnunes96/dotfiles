@@ -75,6 +75,13 @@ fastfetch
 eval "$(starship init bash)"
 ```
 
+### Tela de login
+
+`./login-screen.sh` (uma vez, pede a senha) deixa a tela de login com o mesmo
+fundo, tema, ícones, cursor e fonte do desktop. Ele torna `/usr/share/backgrounds/login`
+seu, e daí em diante o `wallcolor` atualiza o fundo e a cor do login a cada troca
+de wallpaper, sem sudo. Original em `/etc/lightdm/slick-greeter.conf.orig`.
+
 ## Ajustes únicos desta máquina
 
 Ficam fora do script porque mexem no sistema ou dependem do hardware:

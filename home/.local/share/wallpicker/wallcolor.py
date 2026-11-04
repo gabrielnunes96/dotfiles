@@ -18,6 +18,8 @@ HOME = Path.home()
 TEMPLATES = HOME / ".config/wallcolor/templates"
 STATE = HOME / ".cache/wallcolor/current.json"
 THEMES_DIRS = [HOME / ".themes", Path("/usr/share/themes")]
+# login screen assets, made writable for us by login-screen.sh
+LOGIN = Path("/usr/share/backgrounds/login")
 
 # template name -> where it gets rendered
 TARGETS = {
@@ -100,6 +102,21 @@ def apply_theme(variant):
     return name
 
 
+def update_login(image, theme):
+    """Copy the wallpaper and accent theme to the login screen, if it was set up."""
+    if not (LOGIN.is_dir() and LOGIN.stat().st_uid == HOME.stat().st_uid):
+        return False
+    tmp = LOGIN / "background.part"
+    Image.open(image).convert("RGB").save(tmp, "JPEG", quality=92)
+    tmp.replace(LOGIN / "background.jpg")
+    if theme and Path("/usr/share/themes", theme).is_dir():
+        link = LOGIN / "theme.part"
+        link.unlink(missing_ok=True)
+        link.symlink_to(Path("/usr/share/themes", theme))
+        link.replace(LOGIN / "theme")
+    return True
+
+
 def main():
     image = Path(sys.argv[1]).expanduser()
     raw = dominant_accent(image)
@@ -129,9 +146,11 @@ def main():
     if conky.exists():
         subprocess.Popen([str(conky)], start_new_session=True,
                          stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    login = update_login(image, theme)
     STATE.parent.mkdir(parents=True, exist_ok=True)
     STATE.write_text(json.dumps({"image": str(image), "accent": values["{{accent}}"], "theme": theme}))
-    print(f"accent #{values['{{accent}}']}  theme {theme or 'unchanged (variant not installed)'}")
+    print(f"accent #{values['{{accent}}']}  theme {theme or 'unchanged (variant not installed)'}"
+          f"  login {'updated' if login else 'not set up'}")
 
 
 if __name__ == "__main__":
