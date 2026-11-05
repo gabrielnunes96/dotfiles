@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+# Rotates the wallpaper on a timer (systemd user timer wallrotate.timer).
+#   wallrotate            status
+#   wallrotate on [15m]   rotate every interval (15m, 1h, 30s...; default 15m)
+#   wallrotate off        stop rotating
+#   wallrotate now        switch to another random wallpaper now
+set -euo pipefail
+
+FOLDERS=("$HOME/Pictures/Wallpapers" "$HOME/Pictures/4KWALL")
+dropin=$HOME/.config/systemd/user/wallrotate.timer.d
+
+cmd_now() {
+    local current next
+    current=$(gsettings get org.cinnamon.desktop.background picture-uri | tr -d "'" | sed 's|^file://||')
+    next=$(find "${FOLDERS[@]}" -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) 2>/dev/null \
+           | grep -vxF "$current" | shuf -n1)
+    [ -n "$next" ] || { echo "nenhum outro wallpaper em ${FOLDERS[*]}" >&2; exit 1; }
+    gsettings set org.cinnamon.desktop.background picture-uri "file://$next"
+    gsettings set org.cinnamon.desktop.background picture-options zoom
+    "$HOME/.local/bin/wallcolor" "$next"
+}
+
+cmd_on() {
+    local interval=${1:-15m}
+    systemd-analyze timespan "$interval" >/dev/null 2>&1 || { echo "intervalo inválido: $interval (ex.: 15m, 1h)" >&2; exit 1; }
+    mkdir -p "$dropin"
+    # one empty assignment resets every timer from the unit file (a second one would
+    # also wipe the OnActiveSec we just set)
+    printf '[Timer]\nOnActiveSec=\nOnActiveSec=%s\nOnUnitActiveSec=%s\n' "$interval" "$interval" > "$dropin/interval.conf"
+    systemctl --user daemon-reload
+    systemctl --user enable wallrotate.timer >/dev/null 2>&1
+    systemctl --user restart wallrotate.timer
+    echo "trocando o wallpaper a cada $interval"
+}
+
+cmd_off() {
+    systemctl --user disable --now wallrotate.timer >/dev/null 2>&1
+    echo "rotação desligada"
+}
+
+cmd_status() {
+    if systemctl --user is-active -q wallrotate.timer; then
+        local interval next
+        interval=$(sed -n 's/^OnUnitActiveSec=\(..*\)/\1/p' "$dropin/interval.conf" 2>/dev/null | tail -1)
+        # NEXT column is "Thu 2026-11-05 13:29:38 -03"
+        next=$(systemctl --user list-timers wallrotate.timer --no-legend | awk '{print substr($3, 1, 5)}')
+        echo "ligada: a cada ${interval:-15m}, próxima troca às ${next:-?}"
+    else
+        echo "desligada (wallrotate on 15m para ligar)"
+    fi
+}
+
+case ${1:-} in
+    "") cmd_status ;;
+    on) cmd_on "${2:-}" ;;
+    off) cmd_off ;;
+    now) cmd_now ;;
+    *) sed -n '2,7p' "$0" | sed 's/^# \{0,1\}//'; exit 1 ;;
+esac

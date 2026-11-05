@@ -1,0 +1,12 @@
+# Interval comes from wallrotate.timer.d/interval.conf, written by "wallrotate on <interval>".
+[Unit]
+Description=Rotate the wallpaper
+
+[Timer]
+OnActiveSec=15min
+OnUnitActiveSec=15min
+# systemd may otherwise fire up to a minute late
+AccuracySec=5s
+
+[Install]
+WantedBy=timers.target

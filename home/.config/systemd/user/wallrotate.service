@@ -1,0 +1,8 @@
+[Unit]
+Description=Switch to another random wallpaper
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/wallrotate now
+# wallcolor restarts the Conky widgets; keep them alive after this unit exits
+KillMode=process

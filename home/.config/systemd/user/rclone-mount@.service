@@ -1,0 +1,21 @@
+# Mounts the rclone remote named %i at ~/Nuvem/%i while you're logged in.
+# Enable one per remote: systemctl --user enable --now rclone-mount@GoogleDrive
+[Unit]
+Description=rclone mount %i
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=notify
+ExecStartPre=/usr/bin/mkdir -p %h/Nuvem/%i
+# vfs cache: files you open are kept locally (up to 10 GB / 3 days), so apps
+# that need real files (editors, IDEs) work and reopening is instant
+ExecStart=/usr/bin/rclone mount %i: %h/Nuvem/%i \
+    --vfs-cache-mode full --vfs-cache-max-size 10G --vfs-cache-max-age 72h \
+    --dir-cache-time 1h --poll-interval 1m --umask 022
+ExecStop=/usr/bin/fusermount3 -uz %h/Nuvem/%i
+Restart=on-failure
+RestartSec=15
+
+[Install]
+WantedBy=default.target
