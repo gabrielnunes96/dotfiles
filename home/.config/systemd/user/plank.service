@@ -1,0 +1,15 @@
+# Plank dock, restarted if it crashes (it aborts on some monitor change events).
+# Started by ~/.config/autostart/plank.desktop once the session has a display,
+# since Cinnamon doesn't activate graphical-session.target.
+[Unit]
+Description=Plank dock
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Service]
+ExecStart=/usr/bin/plank
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=default.target

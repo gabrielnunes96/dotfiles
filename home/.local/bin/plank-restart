@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
-# Restarts Plank. A single "plank" process draws both docks (enabled-docks =
-# dock1 on DisplayPort-1, dock2 on HDMI-A-0); "plank -n dock2" on top of it
-# would draw a second, overlapping dock2.
+# Restarts Plank through its systemd user service, which also brings it back
+# if it crashes. A single plank process draws both docks (enabled-docks =
+# dock1 on DisplayPort-1, dock2 on HDMI-A-0).
 # Plank computes its position when it starts; after monitor changes (login,
 # fullscreen games switching resolution) it can end up stuck in a corner.
-pkill -x plank
-for _ in 1 2 3 4 5 6 7 8 9 10; do pgrep -x plank >/dev/null || break; sleep 0.3; done
-setsid plank >/dev/null 2>&1 &
+pkill -x plank   # any copy started outside the service
+systemctl --user restart plank.service
