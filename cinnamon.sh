@@ -20,7 +20,8 @@ custom() { # $1=slot $2=name $3=command $4=binding
 }
 custom custom0 'Clipboard history' 'copyq menu' '<Super>v'
 custom custom1 'Wallpaper picker' "$HOME/.local/bin/wallpicker" '<Super>w'
-gsettings set org.cinnamon.desktop.keybindings custom-list "['custom0', 'custom1']"
+custom custom2 'Restart Plank' "$HOME/.local/bin/plank-restart" '<Super><Shift>p'
+gsettings set org.cinnamon.desktop.keybindings custom-list "['custom0', 'custom1', 'custom2']"
 # Super+W used to be "workspace up" too
 gsettings set org.cinnamon.desktop.keybindings.wm switch-to-workspace-up "['<Control><Alt>Up', '<Alt>F1']"
 

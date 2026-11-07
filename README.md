@@ -25,6 +25,7 @@ Pode rodar de novo quantas vezes quiser.
 | `.local/share/wallpicker/wallcolor.py` | Extrai a cor do wallpaper e aplica no sistema |
 | `.config/wallcolor/templates/` | Modelos que recebem a cor de destaque (veja abaixo) |
 | `.local/bin/wallrotate` | Troca o wallpaper sozinho: `wallrotate on 15m`, `off`, `now` |
+| `.local/bin/plank-restart` | Reinicia as duas docks (**Super+Shift+P**) quando o Plank vai para o canto |
 | `.local/bin/dns` | Troca rápida de DNS: `dns ls`, `dns use google`, `dns bench` |
 | `.config/conky/start.sh` | Inicia os relógios e o now playing nos dois monitores |
 | `.config/conky/cava-bars.sh` + `.config/cava/conky` | Visualizador de áudio do now playing |

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Plank
+Comment=Both docks, started after the monitors are laid out
+Exec=sh -c "$HOME/.local/bin/plank-restart"
+X-GNOME-Autostart-enabled=true
+X-GNOME-Autostart-Delay=5
