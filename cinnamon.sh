@@ -24,7 +24,16 @@ custom() { # $1=slot $2=name $3=command $4=binding
 custom custom0 'Clipboard history' 'copyq menu' '<Super>v'
 custom custom1 'Wallpaper picker' "$HOME/.local/bin/wallpicker" '<Super>q'
 custom custom2 'Restart Plank' "$HOME/.local/bin/plank-restart" '<Super>z'
+# Cinnamon only re-reads custom shortcuts when this list changes, so a new key on
+# an existing slot needs the list emptied and set again
+gsettings set org.cinnamon.desktop.keybindings custom-list "[]"
 gsettings set org.cinnamon.desktop.keybindings custom-list "['custom0', 'custom1', 'custom2']"
+
+# with sticky keys a forgotten Super turns the next typed letter into a shortcut;
+# drop the Super+letter ones that are useless here or risky (P reconfigures monitors)
+gsettings set org.cinnamon.desktop.keybindings.media-keys video-rotation-lock "@as []"
+gsettings set org.cinnamon.desktop.keybindings.wm switch-monitor "['XF86Display']"
+gsettings set org.cinnamon.desktop.keybindings looking-glass-keybinding "@as []"
 
 # keyboard: only US international (IBus used to add plain US on Super+Space)
 gsettings set org.cinnamon.desktop.input-sources sources "[('xkb', 'us+intl')]"
