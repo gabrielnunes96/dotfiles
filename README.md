@@ -21,11 +21,11 @@ Pode rodar de novo quantas vezes quiser.
 
 | Arquivo | O que faz |
 |---|---|
-| `.local/share/wallpicker/picker.py` | Seletor de wallpaper em arco (**Super+W**) |
+| `.local/share/wallpicker/picker.py` | Seletor de wallpaper em arco (**Super+Q**) |
 | `.local/share/wallpicker/wallcolor.py` | Extrai a cor do wallpaper e aplica no sistema |
 | `.config/wallcolor/templates/` | Modelos que recebem a cor de destaque (veja abaixo) |
 | `.local/bin/wallrotate` | Troca o wallpaper sozinho: `wallrotate on 15m`, `off`, `now` |
-| `.local/bin/plank-restart` | Reinicia as duas docks (**Super+Shift+P**) quando o Plank vai para o canto |
+| `.local/bin/plank-restart` | Reinicia as duas docks (**Super+Z**) quando o Plank vai para o canto |
 | `.local/bin/dns` | Troca rápida de DNS: `dns ls`, `dns use google`, `dns bench` |
 | `.config/conky/start.sh` | Inicia os relógios e o now playing nos dois monitores |
 | `.config/conky/cava-bars.sh` + `.config/cava/conky` | Visualizador de áudio do now playing |
@@ -85,6 +85,8 @@ seu, e daí em diante o `wallcolor` atualiza o fundo e a cor do login a cada tro
 de wallpaper, sem sudo. Original em `/etc/lightdm/slick-greeter.conf.orig`.
 
 ## Ajustes únicos desta máquina
+
+- **Atalhos para uma mão (canhoto):** `bash /dados/scrips-utilitarios/atalhos-canhoto.sh` — Sticky Keys, Super+A/D/W/S, Super+1..4. Os atalhos deste repositório ficam todos do lado esquerdo e não sobrescrevem esses.
 
 Ficam fora do script porque mexem no sistema ou dependem do hardware:
 

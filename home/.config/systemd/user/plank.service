@@ -7,8 +7,13 @@ StartLimitIntervalSec=60
 StartLimitBurst=5
 
 [Service]
+# un-stick the window matcher (see bamfdaemon.service.d/retry.conf)
+ExecStartPre=-/usr/bin/systemctl --user reset-failed bamfdaemon.service
 ExecStart=/usr/bin/plank
 Restart=on-failure
+# apps launched from the dock land in this unit's cgroup; on restart/crash
+# stop only Plank itself, not every app it opened
+KillMode=process
 RestartSec=3
 
 [Install]

@@ -11,7 +11,10 @@ gsettings set $s screenshot "['<Control>Print']"
 gsettings set $s area-screenshot "['<Control><Shift>Print']"
 gsettings set $s window-screenshot "['<Control><Alt>Print']"
 
-# custom shortcuts: Super+V clipboard history, Super+W wallpaper picker
+# custom shortcuts, all on the left side of the keyboard (one-handed use; the
+# workspace keys and sticky keys come from /dados/scrips-utilitarios/atalhos-canhoto.sh,
+# which this script must not override): Super+V clipboard history,
+# Super+Q wallpaper picker, Super+Z restart Plank
 custom() { # $1=slot $2=name $3=command $4=binding
     local p=org.cinnamon.desktop.keybindings.custom-keybinding:/org/cinnamon/desktop/keybindings/custom-keybindings/$1/
     gsettings set "$p" name "$2"
@@ -19,18 +22,14 @@ custom() { # $1=slot $2=name $3=command $4=binding
     gsettings set "$p" binding "['$4']"
 }
 custom custom0 'Clipboard history' 'copyq menu' '<Super>v'
-custom custom1 'Wallpaper picker' "$HOME/.local/bin/wallpicker" '<Super>w'
-custom custom2 'Restart Plank' "$HOME/.local/bin/plank-restart" '<Super><Shift>p'
+custom custom1 'Wallpaper picker' "$HOME/.local/bin/wallpicker" '<Super>q'
+custom custom2 'Restart Plank' "$HOME/.local/bin/plank-restart" '<Super>z'
 gsettings set org.cinnamon.desktop.keybindings custom-list "['custom0', 'custom1', 'custom2']"
-# Super+W used to be "workspace up" too
-gsettings set org.cinnamon.desktop.keybindings.wm switch-to-workspace-up "['<Control><Alt>Up', '<Alt>F1']"
 
 # keyboard: only US international (IBus used to add plain US on Super+Space)
 gsettings set org.cinnamon.desktop.input-sources sources "[('xkb', 'us+intl')]"
 gsettings set org.freedesktop.ibus.general preload-engines "['xkb:us:intl:eng']"
 gsettings set org.freedesktop.ibus.general use-system-keyboard-layout true
-# sticky keys made a lone Super press latch, turning typed letters into shortcuts
-gsettings set org.cinnamon.desktop.a11y.keyboard stickykeys-enable false
 
 # same 16px size for every tray icon
 gsettings set org.cinnamon panel-zone-icon-sizes '[{"panelId":1,"left":0,"center":0,"right":16},{"panelId":2,"left":0,"center":0,"right":16}]'
