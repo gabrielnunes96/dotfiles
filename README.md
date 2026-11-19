@@ -52,6 +52,14 @@ wallcolor caminho/da/imagem.jpg
 
 O seletor lê imagens de `~/Pictures/Wallpapers` e `~/Pictures/4KWALL`.
 
+### Dispositivos de áudio
+
+`audio-devices` (também no menu, como "Dispositivos de áudio") abre uma janela para
+renomear cada placa de som, desativá-la ou deixá-la só como saída ou só como
+entrada (um microfone com saída de fone deixa de aparecer entre as saídas). Ao
+aplicar, grava regras do WirePlumber em `~/.config/wireplumber/main.lua.d/51-audio-devices.lua`
+e reinicia o WirePlumber. As escolhas ficam em `~/.config/audio-devices/devices.json`.
+
 ## Pré-requisitos (manual, precisa de sudo)
 
 ```bash

@@ -35,6 +35,10 @@ gsettings set org.cinnamon.desktop.keybindings.media-keys video-rotation-lock "@
 gsettings set org.cinnamon.desktop.keybindings.wm switch-monitor "['XF86Display']"
 gsettings set org.cinnamon.desktop.keybindings looking-glass-keybinding "@as []"
 
+# games: fullscreen windows skip the compositor (less latency and stutter,
+# especially with two monitors at different refresh rates)
+gsettings set org.cinnamon.muffin unredirect-fullscreen-windows true
+
 # keyboard: only US international (IBus used to add plain US on Super+Space)
 gsettings set org.cinnamon.desktop.input-sources sources "[('xkb', 'us+intl')]"
 gsettings set org.freedesktop.ibus.general preload-engines "['xkb:us:intl:eng']"

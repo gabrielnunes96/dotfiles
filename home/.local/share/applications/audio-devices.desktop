@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Dispositivos de áudio
+Comment=Ocultar, desativar ou renomear saídas e entradas de som
+Exec=audio-devices
+Icon=audio-card
+Categories=Settings;AudioVideo;
