@@ -5,17 +5,40 @@ widgets do Conky, tela de bloqueio, clipboard e atalhos.
 
 ## Instalar
 
+Num Linux Mint novo, dois passos:
+
+```bash
+git clone https://github.com/gabrielnunes96/dotfiles.git /dados/repos/dotfiles
+```
+
+```bash
+cd /dados/repos/dotfiles && ./setup.sh
+```
+
+O `setup.sh` abre uma lista para marcar o que instalar: os programas que os dotfiles
+usam (Conky, Cava, CopyQ, Plank, tema Orchis, fonte, rclone…), jogos (Steam, GameMode,
+MangoHud, lsfg-vk, Heroic, LACT…), apps (Chrome, VS Code, Discord, Spotify…),
+ferramentas de desenvolvimento (Docker, .NET, gh) e os ajustes do sistema que pedem
+sudo (tela de login, teclado internacional). O que já está instalado aparece como
+"instalado" e vem desmarcado. No fim, ele pergunta se roda o `install.sh`.
+`./setup.sh --dry-run` mostra o que seria feito sem instalar nada.
+
+Para só aplicar as configurações:
+
 ```bash
 ./install.sh
 ```
 
-O script:
+O `install.sh`:
 
 1. Cria links simbólicos de tudo em `home/` para a sua home. Se já existir um arquivo diferente no lugar, ele vira `*.bak`.
 2. Roda `cinnamon.sh`, que aplica os atalhos, o tamanho dos ícones da bandeja, a tela de bloqueio, as atualizações automáticas e os favoritos do Nemo.
 3. Gera os arquivos que dependem de cor a partir do wallpaper atual.
 
 Pode rodar de novo quantas vezes quiser.
+
+Ficam de fora: login nas contas (rclone, Steam, Discord), o `atalhos-canhoto.sh`
+e as escolhas da janela de áudio.
 
 ## O que tem aqui
 
