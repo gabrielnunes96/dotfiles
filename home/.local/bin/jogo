@@ -1,0 +1,13 @@
+#!/bin/sh
+# Steam launch option:
+#   jogo %command%       GameMode + MangoHud, no frame generation
+#   jogo fg %command%    same, plus lsfg-vk frame generation 2x (fg3 = 3x, fg4 = 4x)
+# The fg profiles live in ~/.config/lsfg-vk/conf.toml.
+# MangoHud is enabled as an explicit Vulkan layer so it sits below lsfg-vk and
+# counts the generated frames; the usual `mangohud` wrapper puts it above.
+case "$1" in
+    fg|fg2) export LSFG_PROCESS=fg2; shift ;;
+    fg3|fg4) export LSFG_PROCESS=$1; shift ;;
+esac
+export VK_INSTANCE_LAYERS="VK_LAYER_MANGOHUD_overlay_x86_64${VK_INSTANCE_LAYERS:+:$VK_INSTANCE_LAYERS}"
+exec gamemoderun "$@"

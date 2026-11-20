@@ -1,0 +1,25 @@
+version = 1
+
+[global]
+# Lossless Scaling lives in the second Steam library, which isn't searched by default
+dll = "/dados/steam-games/steamapps/common/Lossless Scaling/Lossless.dll"
+
+# Generic profiles, picked per game from the Steam launch option through `jogo`:
+#   jogo fg %command%    -> 2x      jogo fg3 %command%  -> 3x
+#   jogo fg4 %command%   -> 4x      jogo %command%      -> off
+# flow_scale below 1.0 is lighter on the GPU and barely visible at 1440p.
+[[game]]
+exe = "fg2"
+multiplier = 2
+flow_scale = 0.75
+
+[[game]]
+exe = "fg3"
+multiplier = 3
+flow_scale = 0.75
+
+[[game]]
+exe = "fg4"
+multiplier = 4
+flow_scale = 0.75
+performance_mode = true

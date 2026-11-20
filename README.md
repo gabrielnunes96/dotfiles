@@ -52,6 +52,21 @@ wallcolor caminho/da/imagem.jpg
 
 O seletor lê imagens de `~/Pictures/Wallpapers` e `~/Pictures/4KWALL`.
 
+### Jogos
+
+Opção de inicialização na Steam:
+
+| Opção | O que faz |
+| --- | --- |
+| `jogo %command%` | GameMode + MangoHud, sem geração de quadros |
+| `jogo fg %command%` | o mesmo + geração de quadros 2x (lsfg-vk) |
+| `jogo fg3 %command%` / `jogo fg4 %command%` | geração 3x / 4x |
+
+O MangoHud (Shift esquerdo + F2 mostra/esconde) entra depois da geração de quadros,
+então o FPS mostrado inclui os quadros gerados. Os perfis `fg2`, `fg3` e `fg4` ficam em
+`~/.config/lsfg-vk/conf.toml`. A geração precisa do Lossless Scaling instalado pela
+Steam (forçando o Proton nas propriedades dele) e do pacote `lsfg-vk`.
+
 ### Dispositivos de áudio
 
 `audio-devices` (também no menu, como "Dispositivos de áudio") abre uma janela para
