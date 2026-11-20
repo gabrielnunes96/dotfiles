@@ -1,0 +1,12 @@
+#!/bin/sh
+# Runs at login: reminds about the updates auto-update held back (kernel, video
+# driver, systemd...) until they are installed. The daily job writes the list.
+f=/var/lib/auto-update/pending
+[ -s "$f" ] || exit 0
+# skip the ones already installed by hand since the last run
+up=$(apt list --upgradable 2>/dev/null | awk -F/ 'NR>1 {print $1}' | sort -u)
+n=$(printf '%s\n' "$up" | grep -cxF -f "$f")
+[ "$n" -gt 0 ] || exit 0
+notify-send -u critical -i software-update-urgent "Atualizações sensíveis pendentes" \
+    "$n pacotes (kernel, driver de vídeo ou sistema) esperam você.
+Faça um snapshot e instale pelo Update Manager."

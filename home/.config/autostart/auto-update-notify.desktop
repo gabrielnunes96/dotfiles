@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Aviso de atualizações pendentes
+Comment=Lembra das atualizações sensíveis que o auto-update deixou para instalar à mão
+Exec=sh -c "$HOME/.local/bin/auto-update-notify"
+X-GNOME-Autostart-Delay=30
+NoDisplay=true

@@ -42,6 +42,7 @@ CATALOG=(
 "cli|Dev|Ferramentas de terminal|bat, eza, fd, fzf, ripgrep, zoxide, htop, yt-dlp|1|apt|bat eza fd-find fzf ripgrep zoxide htop yt-dlp xclip jq"
 "login|Sistema|Tela de login estilizada|roda login-screen.sh (mesmo fundo e tema do desktop)|1|fn|setup_login"
 "keyboard|Sistema|Teclado US Internacional no login|deixa o layout com acentos também na tela de login|1|fn|setup_keyboard"
+"autoupdate|Sistema|Atualização automática segura|todo dia: snapshot + só pacotes seguros; kernel e driver só avisam|1|fn|setup_autoupdate"
 "pciids|Sistema|Nomes de hardware atualizados|update-pciids, para o nome da GPU aparecer certo|0|fn|setup_pciids"
 )
 
@@ -105,6 +106,8 @@ check_login() { [[ -L /usr/share/themes/Orchis-Login ]]; }
 setup_login() { run ./login-screen.sh; }
 check_keyboard() { grep -q '^XKBVARIANT="intl"' /etc/default/keyboard; }
 setup_keyboard() { run sudo sed -i 's/^XKBVARIANT=.*/XKBVARIANT="intl"/' /etc/default/keyboard; }
+check_autoupdate() { systemctl is-enabled auto-update.timer &>/dev/null; }
+setup_autoupdate() { run ./setup-auto-update.sh; }
 check_pciids() { return 1; }
 setup_pciids() { run sudo update-pciids; }
 

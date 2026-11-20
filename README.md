@@ -140,4 +140,4 @@ Ficam fora do script porque mexem no sistema ou dependem do hardware:
 - **Rótulos dos discos:** `sudo e2label /dev/sda1 Dados` e `sudo e2label /dev/nvme0n1p2 Sistema`
 - **Heroic (Flatpak) enxergar o `/dados`:** `flatpak override --user --filesystem=/dados com.heroicgameslauncher.hgl`
 - **Teclado US Internacional também no login:** `sudo sed -i 's/^XKBVARIANT=""/XKBVARIANT="intl"/' /etc/default/keyboard`
-- **Atualização automática do APT:** Update Manager → Preferências → Automação
+- **Atualização automática do APT:** `./setup-auto-update.sh` (uma vez, pede a senha; também está no menu do `setup.sh`). Todo dia, ao meio-dia ou 15 min depois de ligar, tira um snapshot do Timeshift e instala só os pacotes seguros. Kernel, driver de vídeo (Mesa), systemd e tela de login ficam retidos: a lista vai para `/var/lib/auto-update/pending` e o `auto-update-notify` avisa a cada login até você instalar pelo Update Manager. Desliga a automação do próprio Update Manager. Log: `journalctl -t auto-update`.
